@@ -1,6 +1,7 @@
 *.sqlite
 *.db
 .gitpod.yml
+.idea
 
 # Logs
 logs
@@ -132,3 +133,4 @@ out
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+data/config.yaml
