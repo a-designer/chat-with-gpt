@@ -4,8 +4,9 @@ import { MessageTree } from './message-tree';
 import { Chat, Message } from './types';
 import { AsyncLoop } from './utils';
 
-const endpoint = '/chatapi';
-
+// Optimising for dev environment for now
+const endpoint = 'http://localhost:3001/chatapi';
+// const endpoint = '/chatapi';
 export let backend: {
     current?: Backend | null
 } = {};
@@ -51,6 +52,7 @@ export class Backend extends EventEmitter {
     public async getSession() {
         const wasAuthenticated = this.isAuthenticated;
         const session = await this.get(endpoint + '/session');
+
         if (session?.authenticated) {
             this.user = {
                 email: session.email,
@@ -146,7 +148,10 @@ export class Backend extends EventEmitter {
     }
 
     async get(url: string) {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+                credentials: 'include',
+            }
+        );
         if (!response.ok) {
             throw new Error(response.statusText);
         }

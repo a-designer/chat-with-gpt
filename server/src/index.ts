@@ -22,6 +22,7 @@ import WhisperRequestHandler from './endpoints/whisper';
 import { configurePassport } from './passport';
 import { configureAuth0 } from './auth0';
 import DeleteChatRequestHandler from './endpoints/delete-chat';
+const cors = require('cors');
 
 process.on('unhandledRejection', (reason, p) => {
     console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -74,6 +75,12 @@ export default class ChatServer {
         });
 
         this.app.use(limiter);
+        // Making it easier for local dev for now
+        this.app.use(cors({
+            credentials: true,
+            origin: 'http://localhost:3002'  // This must be set to true
+        }));
+
 
         this.app.get('/chatapi/health', (req, res) => new HealthRequestHandler(this, req, res));
         this.app.get('/chatapi/session', (req, res) => new SessionRequestHandler(this, req, res));
